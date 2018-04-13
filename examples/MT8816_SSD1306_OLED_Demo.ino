@@ -23,27 +23,32 @@ MT8816 matrix(PIN_RESET, PIN_STROBE, PIN_DATA,
 #define OLED_DC     12
 #define OLED_CS     14
 #define OLED_RESET  27
-Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS);
+Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS); 
 
 
 void setup() {
     display.begin(SSD1306_SWITCHCAPVCC);
     display.display();
     display.clearDisplay();
+
+    // Attach callback to matrix controller to update display on change
+    matrix.setCallback(drawMatrix);
 }
 
 #define CELL_SIZE 6
 #define ROUND_CORNER_RADIUS 3
+#define CELL_PARAMS x*(CELL_SIZE+1) , y*(CELL_SIZE+1), CELL_SIZE, CELL_SIZE, ROUND_CORNER_RADIUS, WHITE
+
 void drawMatrix()
 {
   for(int x=0; x<16; x++)
   {
     for(int y=0; y<8; y++)
     {
-      display.drawRoundRect(x*(CELL_SIZE+1) , y*(CELL_SIZE+1), CELL_SIZE, CELL_SIZE, ROUND_CORNER_RADIUS, WHITE);
+      display.drawRoundRect(CELL_PARAMS);
       if(matrix.getState(x, y) == 1)
       {
-        display.fillRoundRect(x*(CELL_SIZE+1) , y*(CELL_SIZE+1), CELL_SIZE, CELL_SIZE, ROUND_CORNER_RADIUS, WHITE);
+        display.fillRoundRect(CELL_PARAMS);
       }
     }
   }
@@ -67,4 +72,6 @@ void loop() {
 
   // Start over
   delay(1000);
+
+  matrix.store(0);
 }
