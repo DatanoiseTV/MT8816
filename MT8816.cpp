@@ -43,6 +43,9 @@ void MT8816::setState(uint8_t x, uint8_t y, bool state)
     digitalWrite(_pin_strobe, HIGH);
     digitalWrite(_pin_data, state);
     digitalWrite(_pin_strobe, LOW);
+
+    if(hasSetCallback)
+      (*set_callback)();
 }
 
 bool MT8816::getState(uint8_t x, uint8_t y)
