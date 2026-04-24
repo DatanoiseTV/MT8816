@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define CONNECTED 1
-#define DISCONNECTED 1
+#define DISCONNECTED 0
 
 #ifdef ESP32
 #define EEPROM_SIZE (8*16)*32
